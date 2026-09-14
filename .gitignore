@@ -2,6 +2,7 @@ db.sqlite3
 venv/
 staticfiles/
 ngrok.exe
+*.zip
 __pycache__/
 *.py[cod]
 .env
