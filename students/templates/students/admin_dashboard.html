@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Admin Dashboard | Student Information System
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+           font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+           background:
+               radial-gradient(circle at top left, rgba(195, 255, 47, 0.18), transparent 16%),
+               radial-gradient(circle at top right, rgba(94, 214, 255, 0.12), transparent 18%),
+               linear-gradient(180deg, #edf7f2 0%, #f5faf8 100%);
+           color: #123129;
+        }
+
+        a, button, .action, .nav-item {
+           cursor: pointer;
+        }
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+           height: 82px;
+           background: rgba(10, 22, 19, 0.72);
+           backdrop-filter: blur(18px);
+           -webkit-backdrop-filter: blur(18px);
+           color: #ffffff;
+           display: flex;
+           align-items: center;
+           justify-content: space-between;
+           padding: 0 45px;
+           border-bottom: 1px solid rgba(255,255,255,0.08);
+           box-shadow: 0 18px 45px rgba(7, 15, 13, 0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+        }
+
+        .brand {
+           font-size: clamp(1.3rem, 1.8vw, 2rem);
+           font-weight: 800;
+           letter-spacing: -0.04em;
+        }
+
+        .brand span {
+           color: #d5ff63;
+           text-shadow: 0 0 24px rgba(213,255,99,0.46);
+        }
+
+        .logout {
+           text-decoration: none;
+           background: linear-gradient(135deg, #d9ff63, #bfe728);
+           color: #112d27;
+           padding: 12px 22px;
+           border-radius: 12px;
+           font-weight: 800;
+           transition: transform 0.2s ease, box-shadow 0.2s ease;
+           box-shadow: 0 0 0 1px rgba(191, 231, 40, 0.18), 0 12px 26px rgba(191, 231, 40, 0.24);
+        }
+
+        .logout:hover {
+           transform: translateY(-2px);
+           box-shadow: 0 0 0 1px rgba(191, 231, 40, 0.2), 0 18px 34px rgba(191, 231, 40, 0.34);
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .container {
+            max-width: 1450px;
+            margin: auto;
+            padding: 42px 24px 60px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+            padding: 8px 0 0;
+        }
+
+        .welcome h1 {
+            font-size: clamp(2.2rem, 3vw, 3.3rem);
+            margin-bottom: 10px;
+            color: #123129;
+            letter-spacing: -0.06em;
+        }
+
+        .welcome p {
+            color: #617a6d;
+            font-size: 1.05rem;
+        }
+
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 22px;
+
+            margin-bottom: 35px;
+        }
+
+
+        .card {
+            background: linear-gradient(180deg, #ffffff 0%, #fbfefc 100%);
+            border: 1px solid rgba(31, 58, 49, 0.08);
+            border-radius: 22px;
+            padding: 28px 24px;
+            box-shadow: 0 12px 30px rgba(22, 46, 37, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 36px rgba(22, 46, 37, 0.08);
+        }
+
+        .card-title {
+            color: #718078;
+            font-size: 0.9rem;
+            margin-bottom: 14px;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .card-number {
+            color: #17382b;
+            font-size: clamp(2rem, 2vw, 2.7rem);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+
+        /* =====================================================
+           SECTIONS
+        ===================================================== */
+
+        .section {
+            background: linear-gradient(180deg, #ffffff 0%, #fbfefc 100%);
+            border: 1px solid rgba(31, 58, 49, 0.08);
+            border-radius: 24px;
+            padding: 28px 26px;
+            margin-bottom: 28px;
+            box-shadow: 0 12px 30px rgba(22, 46, 37, 0.05);
+        }
+
+        .section h2 {
+            color: #19352a;
+            font-size: clamp(1.35rem, 1.8vw, 1.9rem);
+            margin-bottom: 20px;
+            letter-spacing: -0.04em;
+        }
+
+
+        /* =====================================================
+           ACTIONS
+        ===================================================== */
+
+        .actions {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
+        }
+
+
+        .action {
+            display: block;
+            text-decoration: none;
+            padding: 22px 20px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #f5faf4 0%, #eff6ee 100%);
+            border: 1px solid #dfe8d8;
+            color: #19352a;
+            transition: 0.2s ease;
+            box-shadow: 0 10px 18px rgba(15, 31, 25, 0.02);
+        }
+
+        .action:hover {
+            background: linear-gradient(180deg, #edf9c9 0%, #e5f4b8 100%);
+            border-color: #c8f23d;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px rgba(167, 201, 42, 0.14);
+        }
+
+        .action-title {
+            font-size: 1.02rem;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        .action-description {
+            color: #7b8881;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           APPROVAL BUTTON
+        ===================================================== */
+
+        .approval-action {
+
+            background: #c8f23d;
+
+            border-color: #c8f23d;
+
+            color: #17382b;
+        }
+
+
+        .approval-action:hover {
+
+            background: #d8fa63;
+
+            border-color: #b8df2f;
+        }
+
+
+        .approval-badge {
+
+            display: inline-block;
+
+            margin-top: 12px;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            background: #17382b;
+
+            color: #c8f23d;
+
+            font-size: 11px;
+
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           ACCOUNT
+        ===================================================== */
+
+        .account {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .account-item {
+
+            background: #f5f8f4;
+
+            border-radius: 20px;
+
+            padding: 20px;
+        }
+
+
+        .account-label {
+
+            color: #7a8780;
+
+            font-size: 13px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .account-value {
+
+            color: #19352a;
+
+            font-size: 17px;
+
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           INFORMATION
+        ===================================================== */
+
+        .info {
+
+            background: #edf6d9;
+
+            border-left: 5px solid #c8f23d;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            margin-top: 25px;
+
+            color: #35513f;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width: 1000px) {
+
+            .cards {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .actions {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .account {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        @media(max-width: 650px) {
+
+            .navbar {
+
+                padding: 0 20px;
+            }
+
+
+            .brand {
+
+                font-size: 19px;
+            }
+
+
+            .container {
+
+                padding: 25px 18px;
+            }
+
+
+            .welcome h1 {
+
+                font-size: 32px;
+            }
+
+
+            .cards {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .actions {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        Student
+        <span>Information System</span>
+
+    </div>
+
+
+    <a
+        href="{% url 'logout' %}"
+        class="logout"
+    >
+        Logout
+    </a>
+
+</nav>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container">
+
+
+    <!-- =================================================
+         WELCOME
+    ================================================== -->
+
+    <section class="welcome">
+
+        <h1>
+            Admin Dashboard
+        </h1>
+
+        <p>
+            Manage students, teachers, subjects and
+            academic information.
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         STATISTICS
+    ================================================== -->
+
+    <section class="cards">
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Total Students
+            </div>
+
+            <div class="card-number">
+                {{ total_students|default:"0" }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Total Teachers
+            </div>
+
+            <div class="card-number">
+                {{ total_teachers|default:"0" }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Total Subjects
+            </div>
+
+            <div class="card-number">
+                {{ total_subjects|default:"0" }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                System Users
+            </div>
+
+            <div class="card-number">
+                {{ total_users|default:"0" }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Departments
+            </div>
+
+            <div class="card-number">
+                {{ total_departments|default:"0" }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Active Courses
+            </div>
+
+            <div class="card-number">
+                {{ total_courses|default:"0" }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Pending Fees
+            </div>
+
+            <div class="card-number">
+                {{ pending_fees|default:"0" }}
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-title">
+                Avg Attendance
+            </div>
+
+            <div class="card-number">
+                {{ average_attendance|default:"0" }}%
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================================
+         ADMINISTRATION
+    ================================================== -->
+
+    <section class="section">
+
+        <h2>
+            Administration
+        </h2>
+
+
+        <div class="actions">
+
+
+            <!-- =========================================
+                 STUDENT APPROVAL
+            ========================================== -->
+
+            <a
+                href="{% url 'pending_registrations' %}"
+                class="action approval-action"
+            >
+
+                <div class="action-title">
+                    Student Registrations
+                </div>
+
+                <div class="action-description">
+                    Review new student registration
+                    applications and approve or reject them.
+                </div>
+
+                <span class="approval-badge">
+                    PENDING APPROVAL
+                </span>
+
+            </a>
+
+
+            <!-- =========================================
+                 STUDENTS
+            ========================================== -->
+
+            <a
+                href="{% url 'admin_students' %}"
+                class="action"
+            >
+
+                <div class="action-title">
+                    Manage Students
+                </div>
+
+                <div class="action-description">
+                    Add, edit and manage student information.
+                </div>
+
+            </a>
+
+
+            <!-- =========================================
+                 TEACHERS
+            ========================================== -->
+
+            <a
+                href="{% url 'admin_teachers' %}"
+                class="action"
+            >
+
+                <div class="action-title">
+                    Manage Teachers
+                </div>
+
+                <div class="action-description">
+                    Manage teacher accounts and information.
+                </div>
+
+            </a>
+
+
+            <!-- =========================================
+                 COURSES
+            ========================================== -->
+
+            <a
+               href="{% url 'admin_courses' %}"
+                class="action"
+            >
+                <div class="action-title">
+                    Manage Courses
+                </div>
+                <div class="action-description">
+                    Manage academic courses.
+                </div>
+            </a>
+
+            <!-- =========================================
+                 SUBJECTS
+            ========================================== -->
+
+            <a
+               href="{% url 'admin_subjects' %}"
+                class="action"
+            >
+                <div class="action-title">
+                    Manage Subjects
+                </div>
+                <div class="action-description">
+                    Manage subjects and semesters.
+                </div>
+            </a>
+
+            <!-- =========================================
+                TEACHER SUBJECT ASSIGNMENTS
+            ========================================== -->
+
+            <a
+               href="{% url 'admin_teacher_subjects' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Teacher Subject Assignments
+               </div>
+               <div class="action-description">
+                   Assign subjects to teachers and manage academic loads.
+               </div>
+            </a>
+
+            <!-- =========================================
+                REPORTS
+            ========================================== -->
+
+            <a
+               href="{% url 'admin_reports' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Academic Reports
+               </div>
+               <div class="action-description">
+                   Review attendance, marks, and fee summaries.
+               </div>
+            </a>
+
+            <!-- =========================================
+                ENROLLMENTS
+            ========================================== -->
+
+            <a
+               href="{% url 'admin_enrollments' %}"
+                class="action"
+            >
+                <div class="action-title">
+                    Student Enrollments
+                </div>
+                <div class="action-description">
+                    Manage student subject enrollments.
+                </div>
+            </a>
+
+            <!-- =========================================
+                 ATTENDANCE
+            ========================================== -->
+
+            <a
+               href="{% url 'attendance' %}"
+                class="action"
+            >
+                <div class="action-title">
+                    Attendance Records
+                </div>
+                <div class="action-description">
+                    View and manage attendance.
+                </div>
+            </a>
+
+            <!-- =========================================
+                 EXAMS
+            ========================================== -->
+
+            <a
+               href="{% url 'admin_exams' %}"
+                class="action"
+            >
+                <div class="action-title">
+                    Examinations
+                </div>
+                <div class="action-description">
+                    Manage examination information.
+                </div>
+            </a>
+
+            <!-- =========================================
+                 MARKS
+            ========================================== -->
+
+            <a
+               href="{% url 'marks' %}"
+                class="action"
+            >
+                <div class="action-title">
+                    Examination Marks
+                </div>
+                <div class="action-description">
+                    View and manage student marks.
+                </div>
+            </a>
+
+            <!-- =========================================
+                 FEES
+            ========================================== -->
+
+            <a
+               href="{% url 'admin_fees' %}"
+                class="action"
+            >
+                <div class="action-title">
+                    Fee Management
+                </div>
+                <div class="action-description">
+                    Manage student fee records.
+                </div>
+            </a>
+
+            <!-- =========================================
+                NOTICES
+            ========================================== -->
+
+            <a
+              href="{% url 'admin_notices' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Notice Board
+               </div>
+               <div class="action-description">
+                   Publish announcements, admissions updates, and urgent notices.
+               </div>
+            </a>
+
+            <!-- =========================================
+                TIMETABLE
+            ========================================== -->
+
+            <a
+              href="{% url 'admin_timetable' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Timetable Control
+               </div>
+               <div class="action-description">
+                   Manage subject slots, room assignments, and weekly schedules.
+               </div>
+            </a>
+
+            <!-- =========================================
+                ADMISSIONS
+            ========================================== -->
+
+            <a
+              href="{% url 'admin_admissions' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Admissions Desk
+               </div>
+               <div class="action-description">
+                   Review applications, track potential students, and approve enrollments.
+               </div>
+            </a>
+
+            <!-- =========================================
+                RESULTS
+            ========================================== -->
+
+            <a
+              href="{% url 'admin_results' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Results Center
+               </div>
+               <div class="action-description">
+                   Monitor internal exam performance and publishing status.
+               </div>
+            </a>
+
+            <!-- =========================================
+                PAYMENT RECORDS
+            ========================================== -->
+
+            <a
+              href="{% url 'admin_payments' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Payment Records
+               </div>
+               <div class="action-description">
+                   Review fee payment history and collect payment evidence for each student.
+               </div>
+            </a>
+
+            <!-- =========================================
+                ANALYTICS
+            ========================================== -->
+
+            <a
+             href="{% url 'admin_analytics' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Platform Analytics
+               </div>
+               <div class="action-description">
+                   Track student growth, fee collection health, and operational KPIs.
+               </div>
+            </a>
+
+            <!-- =========================================
+                CAMPUS NETWORK
+            ========================================== -->
+
+            <a
+             href="{% url 'admin_campuses' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Campus Network
+               </div>
+               <div class="action-description">
+                   Manage branches, campuses, and contact details for each location.
+               </div>
+            </a>
+
+            <!-- =========================================
+                BILLING & INVOICES
+            ========================================== -->
+
+            <a
+             href="{% url 'admin_billing' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Billing & Invoices
+               </div>
+               <div class="action-description">
+                   Review subscriptions, invoicing, payment obligations, and renewal status.
+               </div>
+            </a>
+
+            <!-- =========================================
+                SCHOOL SETTINGS
+            ========================================== -->
+
+            <a
+             href="{% url 'admin_school_settings' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   School Settings
+               </div>
+               <div class="action-description">
+                   Configure campus branding, year settings, and subscription plan.
+               </div>
+            </a>
+
+            <!-- =========================================
+                COMMUNICATIONS
+            ========================================== -->
+
+            <a
+              href="{% url 'admin_notifications' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Communication Center
+               </div>
+               <div class="action-description">
+                   Send fee, academic, and campus-wide updates to students, parents, and staff.
+               </div>
+            </a>
+
+            <!-- =========================================
+                LIBRARY
+            ========================================== -->
+
+            <a
+             href="{% url 'admin_library' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Library & Resources
+               </div>
+               <div class="action-description">
+                   Manage books, circulation, stock, and issue tracking for students and staff.
+               </div>
+            </a>
+
+            <!-- =========================================
+                TRANSPORT
+            ========================================== -->
+
+            <a
+             href="{% url 'admin_transport' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Transport Control
+               </div>
+               <div class="action-description">
+                   Manage bus routes, vehicle numbers, pickup points, and student mobility schedules.
+               </div>
+            </a>
+
+            <!-- =========================================
+                HUMAN RESOURCES
+            ========================================== -->
+
+            <a
+             href="{% url 'admin_hr' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   HR & Payroll
+               </div>
+               <div class="action-description">
+                   Track staff records, department assignments, and payroll readiness for the campus.
+               </div>
+            </a>
+
+            <!-- =========================================
+                EVENTS
+            ========================================== -->
+
+            <a
+             href="{% url 'admin_events' %}"
+               class="action"
+            >
+               <div class="action-title">
+                   Campus Events
+               </div>
+               <div class="action-description">
+                   Schedule exams, orientation days, convocation, and academic events across the institution.
+               </div>
+            </a>
+
+            <!-- =========================================
+                DJANGO ADMIN
+            ========================================== -->
+
+            <a
+                href="/admin/"
+                class="action"
+            >
+
+                <div class="action-title">
+                    Django Administration
+                </div>
+
+                <div class="action-description">
+                    Open the complete Django administration
+                    panel.
+                </div>
+
+            </a>
+
+
+        </div>
+
+
+        <div class="info">
+
+            <strong>
+                Student Approval Workflow
+            </strong>
+
+            <br>
+
+            New students first submit their registration
+            application.
+
+            The application remains pending until an
+            administrator reviews it.
+
+            After approval, the student can log in and
+            access the full student dashboard.
+
+            No email notification is required.
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ACADEMIC SNAPSHOT
+    ================================================== -->
+
+    <section class="section">
+
+        <h2>
+           Academic Snapshot
+        </h2>
+
+        <div class="account">
+
+           <div class="account-item">
+
+               <div class="account-label">
+                   Total Fee Collection
+               </div>
+
+               <div class="account-value">
+                   ${{ total_fee_paid|default:"0" }}
+               </div>
+
+           </div>
+
+           <div class="account-item">
+
+               <div class="account-label">
+                   Pending Fee Balance
+               </div>
+
+               <div class="account-value">
+                   ${{ pending_fee_balance|default:"0" }}
+               </div>
+
+           </div>
+
+           <div class="account-item">
+
+               <div class="account-label">
+                   Attendance Status
+               </div>
+
+               <div class="account-value">
+                   {{ average_attendance|default:"0" }}% present
+               </div>
+
+           </div>
+
+        </div>
+
+        <div class="info">
+
+           <strong>Recent Activity</strong>
+           <br>
+
+           {% if recent_activity %}
+               {% for log in recent_activity %}
+                   {{ log.user.username|default:"System" }} - {{ log.action }}<br>
+               {% endfor %}
+           {% else %}
+               No recent activity yet.
+           {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         LOGGED-IN ACCOUNT
+    ================================================== -->
+
+    <section class="section">
+
+        <h2>
+            Logged-in Account
+        </h2>
+
+
+        <div class="account">
+
+
+            <div class="account-item">
+
+                <div class="account-label">
+                    Username
+                </div>
+
+                <div class="account-value">
+                    {{ request.user.username }}
+                </div>
+
+            </div>
+
+
+            <div class="account-item">
+
+                <div class="account-label">
+                    Email
+                </div>
+
+                <div class="account-value">
+                    {{ request.user.email|default:"Not provided" }}
+                </div>
+
+            </div>
+
+
+            <div class="account-item">
+
+                <div class="account-label">
+                    Account Type
+                </div>
+
+                <div class="account-value">
+                    Administrator
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>

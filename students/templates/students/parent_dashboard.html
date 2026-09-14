@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Dashboard | SIS</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #eefaf6, #f6f9ff 40%, #f9f7ed 100%);
+            color: #14372f;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 24px; background: rgba(12, 25, 21, 0.82); border-radius: 18px;
+            color: white; margin-bottom: 28px; box-shadow: 0 20px 40px rgba(12,25,21,.12);
+            backdrop-filter: blur(12px);
+        }
+        .brand { font-size: 1.6rem; font-weight: 800; }
+        .brand span { color: #dcff7c; }
+        .logout { text-decoration: none; color: #123128; background: linear-gradient(135deg,#dcff7c,#bde838); padding: 10px 18px; border-radius: 12px; font-weight: 700; }
+        .cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 28px; }
+        .card {
+            background: rgba(255,255,255,0.72); border: 1px solid rgba(20,55,47,.08); border-radius: 22px; padding: 22px; box-shadow: 0 12px 26px rgba(14,35,28,.05);
+        }
+        .label { color: #607a6d; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+        .value { font-size: 2rem; font-weight: 800; letter-spacing: -0.05em; }
+        .grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 22px; }
+        .panel {
+            background: rgba(255,255,255,0.7); border: 1px solid rgba(20,55,47,.08); border-radius: 22px; padding: 22px; box-shadow: 0 12px 26px rgba(14,35,28,.05);
+        }
+        h2 { font-size: 1.5rem; margin-bottom: 18px; }
+        .student-list { display: grid; gap: 14px; }
+        .student-item {
+            display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; background: #f4faf3; border: 1px solid #dfeee1; border-radius: 16px;
+        }
+        .student-meta strong { display: block; font-size: 1.05rem; }
+        .student-meta small { color: #617b6e; }
+        .chip {
+            display: inline-flex; padding: 7px 12px; border-radius: 999px; background: #dbf9a2; color: #133b31; font-weight: 700; font-size: .8rem;
+        }
+        .notice-list { display: grid; gap: 12px; }
+        .notice-item { padding: 16px; border-radius: 16px; background: linear-gradient(180deg,#f8fff1,#eef8f7); border:1px solid #dfecc7; }
+        .notice-item h4 { margin-bottom: 6px; }
+        .notice-item p { color: #516b62; line-height: 1.6; }
+        .badge { display: inline-block; font-size: .7rem; letter-spacing: .05em; text-transform: uppercase; padding: 6px 10px; border-radius: 999px; background: #e8f7e5; color: #1a4638; margin-bottom: 10px; }
+        @media (max-width: 860px) { .cards, .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="brand">Student <span>Parent Portal</span></div>
+            <a class="logout" href="{% url 'logout' %}">Logout</a>
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <div class="label">Linked Students</div>
+                <div class="value">{{ total_students }}</div>
+            </div>
+            <div class="card">
+                <div class="label">Academic Notices</div>
+                <div class="value">{{ notices|length }}</div>
+            </div>
+            <div class="card">
+                <div class="label">Portal Access</div>
+                <div class="value">Live</div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="panel">
+                <h2>My Children</h2>
+                {% if children_summary %}
+                <div class="student-list">
+                    {% for item in children_summary %}
+                    <div class="student-item">
+                        <div class="student-meta">
+                            <strong>{{ item.student.name }}</strong>
+                            <small>{{ item.student.student_id }} · {{ item.student.course.course_name|default:'Course not assigned' }} · Fee due: ${{ item.fee_due|floatformat:2 }}</small>
+                        </div>
+                        <span class="chip">{{ item.status }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>No linked student accounts yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="panel">
+                <h2>Latest Notices</h2>
+                {% if notices %}
+                <div class="notice-list">
+                    {% for notice in notices %}
+                    <div class="notice-item">
+                        <span class="badge">{{ notice.category }}</span>
+                        <h4>{{ notice.title }}</h4>
+                        <p>{{ notice.content }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p>No announcements available right now.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admissions</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: linear-gradient(180deg, #eefaf1, #f8fbf8); color: #18372d; }
+        .wrap { max-width: 1100px; margin: 40px auto; padding: 0 20px 50px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+        .card { background: rgba(255,255,255,0.8); border: 1px solid rgba(20,52,41,0.08); border-radius: 22px; padding: 25px; box-shadow: 0 14px 28px rgba(14,31,27,0.05); }
+        .grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
+        form { display: grid; gap: 14px; }
+        label { display: grid; gap: 8px; font-weight: 600; }
+        input, select, textarea, button { font: inherit; border-radius: 12px; border: 1px solid #dfe7df; padding: 12px 14px; }
+        input:focus, select:focus, textarea:focus { outline: 2px solid rgba(173, 212, 46, 0.35); }
+        button { background: linear-gradient(135deg, #d8ff63, #bfe728); border: 0; font-weight: 700; cursor: pointer; }
+        table { width:100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border-bottom: 1px solid #e5ebdf; text-align:left; padding: 12px 8px; }
+        .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-size: 12px; font-weight:700; background:#edf7cc; color:#294c36; }
+        .muted { color:#617a6d; }
+        a { color: inherit; text-decoration: none; }
+        .nav { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { display: inline-block; padding: 10px 16px; border-radius: 12px; background: #17382b; color: white; }
+        .alert { background: #fff0d9; border: 1px solid #f0d291; color: #6b4b00; padding: 12px 14px; border-radius: 12px; margin-bottom: 18px; }
+        @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .topbar { display:block; } }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="topbar">
+            <div>
+                <h1>Admissions Portal</h1>
+                <div class="muted">Apply for a course and track your application status.</div>
+            </div>
+            <div class="nav">
+                <a class="btn" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="btn" href="{% url 'logout' %}">Logout</a>
+            </div>
+        </div>
+
+        {% if error %}
+            <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        <div class="grid">
+            <div class="card">
+                <h2>New Application</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <label>
+                        Full name
+                        <input type="text" name="applicant_name" value="{{ student.name }}" required>
+                    </label>
+                    <label>
+                        Email
+                        <input type="email" name="email" value="{{ student.email }}" required>
+                    </label>
+                    <label>
+                        Phone
+                        <input type="text" name="phone" value="{{ student.phone }}">
+                    </label>
+                    <label>
+                        Preferred course
+                        <select name="course">
+                            <option value="">Select course</option>
+                            {% for course in courses %}
+                                <option value="{{ course.course_id }}" {% if student.course and student.course_id == course.course_id %}selected{% endif %}>{{ course.course_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>
+                        Intake year
+                        <input type="number" name="preferred_year" value="{{ year|default:2026 }}">
+                    </label>
+                    <label>
+                        Source
+                        <select name="source">
+                            <option value="Website">Website</option>
+                            <option value="Referral">Referral</option>
+                            <option value="Walk-in">Walk-in</option>
+                            <option value="Social Media">Social Media</option>
+                        </select>
+                    </label>
+                    <label>
+                        Notes
+                        <textarea name="notes" rows="4" placeholder="Tell us anything important..."></textarea>
+                    </label>
+                    <button type="submit">Submit Application</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Application Status</h2>
+                <p class="muted">Your previous submissions are listed below.</p>
+                {% if applications %}
+                    <table>
+                        <thead>
+                            <tr><th>Course</th><th>Status</th><th>Date</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                            <tr>
+                                <td>{{ app.course.course_name|default:"Open application" }}</td>
+                                <td><span class="badge">{{ app.status }}</span></td>
+                                <td>{{ app.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="muted">No applications yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Registration Submitted | SIS</title>
+
+    <style>
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #f5f7f2;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: #19352a;
+
+        }
+
+        .card {
+
+            width: 90%;
+
+            max-width: 600px;
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 45px;
+
+            text-align: center;
+
+            box-shadow:
+                0 10px 35px
+                rgba(23,56,43,0.10);
+
+        }
+
+        .icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            background: #c8f23d;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 32px;
+
+            font-weight: 900;
+
+        }
+
+        h1 {
+
+            margin-top: 25px;
+
+        }
+
+        p {
+
+            color: #718078;
+
+            line-height: 1.6;
+
+        }
+
+        .username {
+
+            display: inline-block;
+
+            background: #edf8d7;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            font-weight: 700;
+
+            margin: 10px 0;
+
+        }
+
+        a {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            background: #17382b;
+
+            color: white;
+
+            padding: 13px 25px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <div class="icon">
+            ✓
+        </div>
+
+        <h1>
+            Registration Submitted
+        </h1>
+
+        <p>
+            Your student registration has been submitted
+            successfully.
+        </p>
+
+        <p>
+            Your application is currently
+            <strong>Pending Approval</strong>.
+        </p>
+
+        <p>
+            Username:
+        </p>
+
+        <div class="username">
+            {{ username }}
+        </div>
+
+        <p>
+            An administrator must approve your account
+            before you can log in.
+        </p>
+
+        <a href="{% url 'login' %}">
+            Return to Login
+        </a>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,112 @@
+/* Shared visual system for every custom Cloud Campus SIS screen. */
+:root {
+    --sis-ink: #102b32;
+    --sis-ink-soft: #1e4449;
+    --sis-ivory: #f6f1e8;
+    --sis-paper: #fffdf8;
+    --sis-copper: #c86d42;
+    --sis-copper-dark: #9e4a2c;
+    --sis-aqua: #3e8c89;
+    --sis-muted: #697c7b;
+    --sis-line: rgba(16, 43, 50, 0.12);
+    --sis-shadow: 0 18px 48px rgba(16, 43, 50, 0.09);
+}
+
+* { -webkit-font-smoothing: antialiased; }
+body {
+    font-family: "Avenir Next", "Segoe UI", sans-serif !important;
+    color: var(--sis-ink) !important;
+    background:
+        radial-gradient(circle at 88% 2%, rgba(200, 109, 66, 0.15), transparent 25rem),
+        radial-gradient(circle at 42% 95%, rgba(62, 140, 137, 0.12), transparent 28rem),
+        var(--sis-ivory) !important;
+}
+
+body::before {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    opacity: .24;
+    background-image: linear-gradient(rgba(16, 43, 50, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 43, 50, .04) 1px, transparent 1px);
+    background-size: 38px 38px;
+    mask-image: linear-gradient(to bottom, #000, transparent 78%);
+}
+
+h1, h2, h3, .page-title, .header h1, .header h2 {
+    color: var(--sis-ink) !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-weight: 700 !important;
+    letter-spacing: -.045em !important;
+}
+p, .muted, .subtitle, .header p, .teacher-role, .card-description { color: var(--sis-muted) !important; }
+a { color: inherit; }
+
+/* App navigation */
+.sidebar {
+    width: 278px !important;
+    padding: 32px 22px !important;
+    background: linear-gradient(168deg, #102d33, #173d3e 64%, #24504e) !important;
+    box-shadow: 20px 0 55px rgba(16, 43, 50, .16) !important;
+}
+.logo, .logo-box, .brand-mark {
+    background: linear-gradient(135deg, #e3a05d, #c86d42) !important;
+    color: #fffaf2 !important;
+    box-shadow: 0 13px 28px rgba(200, 109, 66, .28) !important;
+}
+.logo-text h2, .brand h2 { color: #fffaf2 !important; font-family: "Avenir Next", "Segoe UI", sans-serif !important; letter-spacing: -.04em !important; }
+.logo-text p, .brand p, .nav-title { color: #a8c0bc !important; }
+.nav-title { letter-spacing: .18em !important; }
+.nav-item { color: #dce9e5 !important; border-radius: 14px !important; padding: 14px 16px !important; }
+.nav-item:hover { background: rgba(255,255,255,.10) !important; transform: translateX(4px) !important; }
+.nav-item.active { background: #e3a05d !important; color: #1a3435 !important; box-shadow: 0 12px 26px rgba(200,109,66,.22) !important; }
+.logout { color: #f7f1e8 !important; border: 1px solid rgba(255,255,255,.13) !important; background: rgba(255,255,255,.08) !important; }
+
+/* Data and content surfaces */
+.main, main.container, .container { padding-inline: clamp(22px, 5vw, 76px) !important; }
+.main { margin-left: 278px !important; padding-top: 52px !important; }
+.card, .panel, .feature, .plan, .glass-card, .subject, .action, .form-card, .content-card {
+    background: rgba(255, 253, 248, .88) !important;
+    border: 1px solid var(--sis-line) !important;
+    box-shadow: var(--sis-shadow) !important;
+}
+.card, .panel, .feature, .plan, .form-card, .content-card { border-radius: 22px !important; }
+.card:hover, .action:hover, .subject:hover, .feature:hover {
+    border-color: rgba(200,109,66,.42) !important;
+    box-shadow: 0 24px 54px rgba(16,43,50,.13) !important;
+    transform: translateY(-4px) !important;
+}
+.action, .subject { border-radius: 16px !important; }
+.card-label, .panel-header span, .subject-info p, .action p { color: var(--sis-muted) !important; }
+.subject-code, .badge, .panel-header span, .status, .tag { background: #f5ddbf !important; color: #7c3d26 !important; }
+
+/* Controls and tables */
+button, .btn, .save, .save-button, input[type="submit"], input[type="button"] {
+    background: linear-gradient(135deg, var(--sis-copper), var(--sis-copper-dark)) !important;
+    color: #fffaf3 !important;
+    border: 0 !important;
+    box-shadow: 0 10px 22px rgba(158,74,44,.20) !important;
+}
+button:hover, .btn:hover, .save:hover, .save-button:hover, input[type="submit"]:hover { filter: brightness(1.06); transform: translateY(-2px); }
+input, select, textarea { border-color: rgba(16,43,50,.18) !important; background: rgba(255,253,248,.92) !important; color: var(--sis-ink) !important; }
+input:focus, select:focus, textarea:focus { border-color: var(--sis-copper) !important; box-shadow: 0 0 0 4px rgba(200,109,66,.13) !important; outline: 0; }
+table { background: rgba(255,253,248,.6); border-radius: 16px; overflow: hidden; }
+th { background: #eee8dc !important; color: #526665 !important; }
+td { border-color: rgba(16,43,50,.08) !important; }
+
+/* Public and authentication screens */
+.nav { background: rgba(16,43,50,.90) !important; border-color: rgba(255,255,255,.10) !important; }
+.brand, .brand span { color: #fffaf2 !important; }
+.brand span { color: #e3a05d !important; }
+.hero-copy h1, .cta h2 { color: #fffaf2 !important; }
+.btn-secondary { background: transparent !important; color: #fffaf2 !important; border: 1px solid rgba(255,255,255,.34) !important; box-shadow: none !important; }
+.btn-primary { background: linear-gradient(135deg, #e3a05d, #c86d42) !important; color: #fffaf2 !important; }
+.feature .icon { background: #f5ddbf !important; color: #7c3d26 !important; }
+.plan.featured { background: linear-gradient(145deg, #fff5e6, #f4ddbd) !important; border-color: rgba(200,109,66,.35) !important; }
+
+@media (max-width: 700px) {
+    .sidebar { width: 100% !important; }
+    .main { margin-left: 0 !important; padding: 32px 20px !important; }
+    .main, main.container, .container { padding-inline: 20px !important; }
+}

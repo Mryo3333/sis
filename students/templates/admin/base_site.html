@@ -1,0 +1,524 @@
+{% extends "admin/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Student Information System | Django Administration
+{% endblock %}
+
+
+{% block branding %}
+
+<div id="site-name">
+
+    <a href="{% url 'admin:index' %}"
+       style="
+           display:flex;
+           align-items:center;
+           gap:14px;
+           text-decoration:none;
+       ">
+
+        <span
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:center;
+
+                width:48px;
+                height:48px;
+
+                border-radius:14px;
+
+                background:#c8f23d;
+                color:#17382b;
+
+                font-size:17px;
+                font-weight:900;
+            "
+        >
+            SIS
+        </span>
+
+
+        <span
+            style="
+                color:white;
+                font-size:22px;
+                font-weight:700;
+            "
+        >
+            Student Information System
+        </span>
+
+    </a>
+
+</div>
+
+{% endblock %}
+
+
+{% block nav-global %}
+
+<div
+    style="
+        margin-left:20px;
+        margin-bottom:10px;
+        font-size:13px;
+        color:#a8bbb0;
+    "
+>
+    Academic Management
+</div>
+
+{% endblock %}
+
+
+{% block extrastyle %}
+
+<style>
+
+    /* =====================================================
+       SIS ADMIN THEME
+    ===================================================== */
+
+    :root {
+
+        --sis-green: #17382b;
+        --sis-green-dark: #102b20;
+        --sis-lime: #c8f23d;
+        --sis-light: #f5f7f2;
+        --sis-border: #dfe7df;
+
+    }
+
+
+    /* =====================================================
+       BODY
+    ===================================================== */
+
+    body {
+
+        background:
+            #f5f7f2 !important;
+
+        color:
+            #19352a !important;
+
+    }
+
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    #header {
+
+        background:
+            #17382b !important;
+
+        color:
+            white !important;
+
+        min-height:
+            72px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+    }
+
+
+    #branding h1 {
+
+        color:
+            white !important;
+
+    }
+
+
+    #branding h1 a {
+
+        color:
+            white !important;
+
+    }
+
+
+    #user-tools {
+
+        color:
+            #dce6e0 !important;
+
+    }
+
+
+    #user-tools a {
+
+        color:
+            white !important;
+
+    }
+
+
+    #user-tools a:hover {
+
+        color:
+            #c8f23d !important;
+
+    }
+
+
+    /* =====================================================
+       BREADCRUMBS
+    ===================================================== */
+
+    div.breadcrumbs {
+
+        background:
+            #24533f !important;
+
+        color:
+            white !important;
+
+        border-bottom:
+            1px solid #dfe7df;
+
+    }
+
+
+    div.breadcrumbs a {
+
+        color:
+            white !important;
+
+    }
+
+
+    /* =====================================================
+       LINKS
+    ===================================================== */
+
+    a:link,
+    a:visited {
+
+        color:
+            #247a55;
+
+    }
+
+
+    a:hover {
+
+        color:
+            #17382b;
+
+    }
+
+
+    /* =====================================================
+       MODULES / CARDS
+    ===================================================== */
+
+    .module {
+
+        background:
+            white !important;
+
+        border:
+            1px solid #dfe7df !important;
+
+        border-radius:
+            14px !important;
+
+        overflow:
+            hidden;
+
+        box-shadow:
+            0 6px 20px rgba(23,56,43,0.06);
+
+        margin-bottom:
+            22px;
+
+    }
+
+
+    .module caption,
+    .module h2 {
+
+        background:
+            #24533f !important;
+
+        color:
+            white !important;
+
+    }
+
+
+    .module caption a {
+
+        color:
+            white !important;
+
+    }
+
+
+    /* =====================================================
+       TABLES
+    ===================================================== */
+
+    #changelist table {
+
+        background:
+            white;
+
+        border-radius:
+            12px;
+
+        overflow:
+            hidden;
+
+    }
+
+
+    #changelist thead th {
+
+        background:
+            #edf3ed !important;
+
+        color:
+            #19352a !important;
+
+    }
+
+
+    #changelist tbody tr:hover {
+
+        background:
+            #f5f9ec !important;
+
+    }
+
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+
+    .button,
+    input[type="submit"],
+    input[type="button"],
+    .submit-row input,
+    a.button {
+
+        background:
+            #17382b !important;
+
+        color:
+            white !important;
+
+        border:
+            none !important;
+
+        border-radius:
+            8px !important;
+
+    }
+
+
+    .button:hover,
+    input[type="submit"]:hover,
+    input[type="button"]:hover,
+    .submit-row input:hover,
+    a.button:hover {
+
+        background:
+            #24533f !important;
+
+    }
+
+
+    /* =====================================================
+       SAVE BUTTON
+    ===================================================== */
+
+    .submit-row {
+
+        background:
+            white !important;
+
+        border:
+            1px solid #dfe7df !important;
+
+        border-radius:
+            12px;
+
+    }
+
+
+    /* =====================================================
+       INPUTS
+    ===================================================== */
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="number"],
+    input[type="url"],
+    input[type="date"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+
+        border:
+            1px solid #ccd8ce !important;
+
+        border-radius:
+            8px !important;
+
+        padding:
+            8px !important;
+
+    }
+
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+
+        border-color:
+            #9fc82f !important;
+
+        outline:
+            none !important;
+
+        box-shadow:
+            0 0 0 2px rgba(200,242,61,0.25) !important;
+
+    }
+
+
+    /* =====================================================
+       FILTER SIDEBAR
+    ===================================================== */
+
+    #changelist-filter {
+
+        background:
+            white !important;
+
+        border-left:
+            1px solid #dfe7df;
+
+    }
+
+
+    #changelist-filter h2 {
+
+        background:
+            #24533f !important;
+
+        color:
+            white !important;
+
+    }
+
+
+    #changelist-filter h3 {
+
+        color:
+            #19352a !important;
+
+    }
+
+
+    /* =====================================================
+       OBJECT TOOLS
+    ===================================================== */
+
+    .object-tools a {
+
+        background:
+            #c8f23d !important;
+
+        color:
+            #17382b !important;
+
+        border-radius:
+            8px !important;
+
+        font-weight:
+            700;
+
+    }
+
+
+    .object-tools a:hover {
+
+        background:
+            #b7df32 !important;
+
+    }
+
+
+    /* =====================================================
+       PAGINATION
+    ===================================================== */
+
+    .paginator {
+
+        background:
+            white !important;
+
+        border:
+            1px solid #dfe7df;
+
+        border-radius:
+            10px;
+
+        padding:
+            10px;
+
+    }
+
+
+    /* =====================================================
+       MESSAGES
+    ===================================================== */
+
+    ul.messagelist li {
+
+        border-radius:
+            8px;
+
+        margin-bottom:
+            10px;
+
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    #footer {
+
+        background:
+            #17382b;
+
+        color:
+            #a8bbb0;
+
+        padding:
+            20px;
+
+        margin-top:
+            30px;
+
+    }
+
+</style>
+
+{% endblock %}

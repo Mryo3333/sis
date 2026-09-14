@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Django: Run local website",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}\\manage.py",
+            "args": [
+                "runserver",
+                "127.0.0.1:8000"
+            ],
+            "django": true,
+            "env": {
+                "DEBUG": "True",
+                "FORCE_HTTPS": "False"
+            },
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "Starting development server at (https?://\\S+)",
+                "uriFormat": "http://localhost:8000/"
+            }
+        }
+    ]
+}

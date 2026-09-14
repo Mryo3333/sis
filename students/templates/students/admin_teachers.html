@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Teachers | SIS</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7f2;
+            color: #193b2a;
+        }
+        .navbar {
+            background: #193b2a;
+            color: white;
+            padding: 18px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .brand { font-size: 24px; font-weight: 700; }
+        .brand span { color: #c9e84a; }
+        .logout {
+            text-decoration: none;
+            background: #c9e84a;
+            color: #193b2a;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+        .container { max-width: 1400px; margin: auto; padding: 35px; }
+        h1 { margin-top: 0; font-size: 36px; }
+        .subtitle { color: #718078; margin-bottom: 30px; }
+        .card {
+            background: white;
+            border: 1px solid #e1e7e1;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(25, 59, 42, 0.07);
+        }
+        .search { display: flex; gap: 12px; margin-bottom: 20px; }
+        .search input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #dce5da;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button, .button {
+            border: none;
+            background: #c9e84a;
+            color: #193b2a;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button-dark { background: #193b2a; color: white; }
+        .button-danger { background: #dc5c5c; color: white; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #edf2eb; text-align: left; padding: 15px; }
+        td { padding: 15px; border-bottom: 1px solid #e5eae5; }
+        .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        .form-group { display: flex; flex-direction: column; gap: 7px; }
+        .form-group label { font-weight: 700; }
+        .form-group input, .form-group select { padding: 12px; border: 1px solid #dce5da; border-radius: 8px; font-size: 15px; }
+        .full { grid-column: 1 / -1; }
+        .form-actions { margin-top: 20px; display: flex; gap: 10px; }
+        .empty { padding: 30px; text-align: center; color: #718078; }
+        @media(max-width: 800px) {
+            .form-grid { grid-template-columns: 1fr; }
+            table { font-size: 14px; }
+            .container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">Student <span>Information System</span></div>
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+    </div>
+
+    <div class="container">
+        <h1>Manage Teachers</h1>
+        <p class="subtitle">Add, edit, search and manage teacher accounts and assignments.</p>
+
+        <div class="card">
+            {% if edit_teacher %}
+                <h2>Edit Teacher</h2>
+            {% else %}
+                <h2>Add New Teacher</h2>
+            {% endif %}
+
+            <form method="POST" {% if edit_teacher %}action="{% url 'admin_edit_teacher' edit_teacher.teacher_id %}"{% else %}action="{% url 'admin_add_teacher' %}"{% endif %}>
+                {% csrf_token %}
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Teacher ID</label>
+                        <input type="text" name="teacher_id" placeholder="Example: T-1001" value="{% if edit_teacher %}{{ edit_teacher.teacher_id }}{% endif %}" {% if edit_teacher %}readonly{% endif %} required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Teacher Name</label>
+                        <input type="text" name="name" placeholder="Teacher name" value="{% if edit_teacher %}{{ edit_teacher.name }}{% endif %}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" placeholder="teacher@example.com" value="{% if edit_teacher %}{{ edit_teacher.email|default:'' }}{% endif %}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select name="department" required>
+                            <option value="">Select Department</option>
+                            {% for department in departments %}
+                                <option value="{{ department.department_id }}" {% if edit_teacher and edit_teacher.department and edit_teacher.department.department_id == department.department_id %}selected{% endif %}>{{ department.department_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="Active" {% if edit_teacher and edit_teacher.status == 'Active' %}selected{% endif %}>Active</option>
+                            <option value="Inactive" {% if edit_teacher and edit_teacher.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" name="username" placeholder="Optional login username" value="{% if edit_teacher %}{% if edit_teacher.user_profile %}{{ edit_teacher.user_profile.user.username }}{% endif %}{% endif %}">
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Leave blank to keep current password">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit">{% if edit_teacher %}Update Teacher{% else %}Add Teacher{% endif %}</button>
+                    {% if edit_teacher %}
+                        <a href="{% url 'admin_teachers' %}" class="button button-dark">Cancel</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Teacher List</h2>
+            <form method="GET" class="search">
+                <input type="text" name="q" placeholder="Search by teacher ID, name or email" value="{{ search }}">
+                <button type="submit">Search</button>
+            </form>
+
+            {% if teachers %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Teacher ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher in teachers %}
+                            <tr>
+                                <td>{{ teacher.teacher_id }}</td>
+                                <td>{{ teacher.name }}</td>
+                                <td>{{ teacher.email|default:'Not provided' }}</td>
+                                <td>{{ teacher.department.department_name }}</td>
+                                <td>{{ teacher.status }}</td>
+                                <td>
+                                    <div class="actions">
+                                        <a href="{% url 'admin_teachers' %}?edit={{ teacher.teacher_id }}" class="button button-dark">Edit</a>
+                                        <form method="POST" action="{% url 'admin_delete_teacher' teacher.teacher_id %}" onsubmit="return confirm('Delete this teacher?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="button-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty">No teachers found.</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

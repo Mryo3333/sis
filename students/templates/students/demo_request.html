@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request a Demo | Cloud Campus</title>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <style>
+        body { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+        .card { width: min(620px, 100%); background: rgba(255,253,248,.94); border: 1px solid rgba(16,43,50,.12); border-radius: 24px; padding: 32px; box-shadow: 0 20px 50px rgba(16,43,50,.12); }
+        form { display: grid; gap: 16px; margin-top: 24px; }
+        label { display: grid; gap: 8px; font-weight: 700; }
+        input, textarea { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(16,43,50,.2); font: inherit; }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+        .back { text-decoration: none; color: #244c4b; font-weight: 700; }
+        .error { color: #9e342b; font-weight: 700; }
+        .success { background: #e7f5df; border-radius: 14px; padding: 18px; color: #285c36; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>Request a Cloud Campus demo</h1>
+        <p>Tell us about your institution and our team will contact you.</p>
+        {% if submitted %}
+            <div class="success">Thank you. Your demo request was submitted successfully.</div>
+            <p style="margin-top: 20px;"><a class="back" href="{% url 'home' %}">Return to homepage</a></p>
+        {% else %}
+            {% if error %}<p class="error">{{ error }}</p>{% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <label>Name
+                    <input name="applicant_name" value="{{ form_data.applicant_name|default:'' }}" required>
+                </label>
+                <label>Email
+                    <input type="email" name="email" value="{{ form_data.email|default:'' }}" required>
+                </label>
+                <label>Phone
+                    <input name="phone" value="{{ form_data.phone|default:'' }}">
+                </label>
+                <label>What would you like to discuss?
+                    <textarea name="notes" rows="4">{{ form_data.notes|default:'' }}</textarea>
+                </label>
+                <div class="actions">
+                    <button type="submit" class="btn">Request Demo</button>
+                    <a class="back" href="{% url 'home' %}">Back to homepage</a>
+                </div>
+            </form>
+        {% endif %}
+    </main>
+</body>
+</html>

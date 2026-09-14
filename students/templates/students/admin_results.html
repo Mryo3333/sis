@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Results</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; background: linear-gradient(180deg, #edf8f2, #fbfdfb); color:#17382b; }
+        .wrap { max-width: 1200px; margin: 36px auto; padding: 0 18px 40px; }
+        .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .card { background: rgba(255,255,255,0.82); border:1px solid rgba(17,40,33,0.08); border-radius: 22px; padding: 22px; box-shadow: 0 12px 28px rgba(17,40,33,0.04); }
+        table { width:100%; border-collapse: collapse; }
+        th, td { padding: 12px 10px; border-bottom:1px solid #e7efe9; text-align:left; }
+        .badge { display:inline-block; padding: 5px 10px; border-radius:999px; background:#edf6d7; font-size:12px; font-weight:700; }
+        .btn { display:inline-block; padding: 10px 16px; border-radius:12px; background:#17382b; color:#fff; text-decoration:none; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div>
+                <h1>Academic Results</h1>
+                <p>Review all published student performance results.</p>
+            </div>
+            <a class="btn" href="{% url 'dashboard' %}">Dashboard</a>
+        </div>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Exam</th>
+                        <th>Marks</th>
+                        <th>Grade</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.student.name }}</td>
+                        <td>{{ result.subject.subject_name }}</td>
+                        <td>{{ result.exam.exam_name }}</td>
+                        <td>{{ result.marks_obtained }}/{{ result.max_marks }}</td>
+                        <td><span class="badge">{{ result.grade }}</span></td>
+                        <td>{{ result.status }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6">No result records available.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

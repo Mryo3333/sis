@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Timetable | SIS</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: "Segoe UI", Arial, sans-serif; background: linear-gradient(180deg,#edf4ff,#f7faf9 100%); color:#163a31; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px 60px; }
+        .header { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-bottom: 24px; }
+        .header h1 { font-size: clamp(2rem,4vw,3rem); letter-spacing:-0.06em; }
+        .toolbar a { text-decoration:none; background: linear-gradient(135deg,#dcff7c,#bce63d); color:#112f29; font-weight:800; padding: 12px 18px; border-radius: 12px; }
+        .panel { background: rgba(255,255,255,.8); border:1px solid rgba(18,49,40,.08); border-radius: 24px; padding: 22px; box-shadow: 0 12px 26px rgba(14,35,28,.05); margin-bottom: 24px; }
+        form.grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+        label { display:block; font-weight:700; margin-bottom:8px; }
+        input, select { width:100%; padding: 12px 14px; border: 1px solid #d9e1d8; border-radius: 12px; font: inherit; background: #f8fbf9; }
+        button { margin-top: 8px; border: none; background: linear-gradient(135deg,#d8ff68,#bce537); color:#15362c; font-weight:800; padding: 12px 18px; border-radius: 12px; cursor: pointer; }
+        table { width:100%; border-collapse: collapse; }
+        th, td { padding: 14px 12px; border-bottom: 1px solid #e4ebe6; text-align: left; }
+        th { color:#64806d; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; }
+        .delete { background:#1a3a36; color:#fff; border:none; border-radius:10px; padding: 8px 12px; font-weight:700; cursor:pointer; }
+        @media (max-width: 760px) { form.grid { grid-template-columns: 1fr; } .header { flex-direction: column; align-items: flex-start; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Manage Timetable</h1>
+            <div class="toolbar">
+                <a href="{% url 'dashboard' %}">Back to dashboard</a>
+            </div>
+        </div>
+
+        <div class="panel">
+            <form method="post">
+                {% csrf_token %}
+                <div class="grid">
+                    <div><label>Subject</label><select name="subject" required>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.subject_id }}">{{ subject.subject_name }}</option>
+                        {% endfor %}
+                    </select></div>
+                    <div><label>Teacher</label><select name="teacher">
+                        <option value="">-- Optional --</option>
+                        {% for teacher in teachers %}
+                        <option value="{{ teacher.teacher_id }}">{{ teacher.name }} ({{ teacher.teacher_id }})</option>
+                        {% endfor %}
+                    </select></div>
+                    <div><label>Day</label><select name="day_of_week"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div>
+                    <div><label>Start Time</label><input type="time" name="start_time" value="09:00"></div>
+                    <div><label>End Time</label><input type="time" name="end_time" value="10:30"></div>
+                    <div><label>Room</label><input type="text" name="room" placeholder="A-201"></div>
+                    <div><label>Academic Year</label><input type="text" name="academic_year" value="2026-2027"></div>
+                    <div><label>Semester</label><input type="number" name="semester" value="1" min="1" max="12"></div>
+                </div>
+                <button type="submit">Add Timetable slot</button>
+            </form>
+        </div>
+
+        <div class="panel">
+            <table>
+                <thead>
+                    <tr><th>Subject</th><th>Teacher</th><th>Day</th><th>Time</th><th>Room</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry.subject.subject_name }}</td>
+                        <td>{{ entry.teacher.name|default:'Unassigned' }}</td>
+                        <td>{{ entry.day_of_week }}</td>
+                        <td>{{ entry.start_time }} - {{ entry.end_time }}</td>
+                        <td>{{ entry.room|default:'General Hall' }}</td>
+                        <td>
+                            <form method="post" action="{% url 'admin_delete_timetable' entry.timetable_id %}">
+                                {% csrf_token %}
+                                <button class="delete" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6">No timetable entries yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

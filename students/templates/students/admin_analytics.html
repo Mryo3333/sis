@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Analytics</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: linear-gradient(180deg, #edf7f3, #f8fbfa); color: #17382b; }
+        .wrap { max-width: 1180px; margin: 40px auto; padding: 0 18px 48px; }
+        .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 12px; }
+        .card { background: rgba(255,255,255,0.9); border: 1px solid rgba(57,89,74,0.08); border-radius: 22px; padding: 24px; box-shadow: 0 12px 28px rgba(16,31,28,0.05); }
+        .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 18px 0 24px; }
+        .stat { background: linear-gradient(180deg, #ffffff, #fafdfb); border-radius: 18px; padding: 20px; border: 1px solid #e6efe9; }
+        .label { color: #728478; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .value { font-size: 2rem; font-weight: 800; margin-top: 8px; }
+        .list { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border-bottom: 1px solid #e8efea; text-align: left; padding: 12px 10px; }
+        th { color: #647a71; font-size: 12px; text-transform: uppercase; }
+        a { color: inherit; text-decoration: none; }
+        .btn { display:inline-block; padding: 10px 16px; border-radius: 10px; background: #17382b; color: white; font-weight: 700; }
+        @media (max-width: 900px) { .grid, .list { grid-template-columns: 1fr; } .top { display:block; } }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div>
+                <h1>Platform Analytics</h1>
+                <p>Operational overview for {{ settings.school_name|default:'Your institution' }}.</p>
+            </div>
+            <a class="btn" href="{% url 'dashboard' %}">Dashboard</a>
+        </div>
+
+        <div class="grid">
+            <div class="stat">
+                <div class="label">Students</div>
+                <div class="value">{{ total_students }}</div>
+            </div>
+            <div class="stat">
+                <div class="label">Teachers</div>
+                <div class="value">{{ total_teachers }}</div>
+            </div>
+            <div class="stat">
+                <div class="label">Departments</div>
+                <div class="value">{{ total_departments }}</div>
+            </div>
+            <div class="stat">
+                <div class="label">Courses</div>
+                <div class="value">{{ total_courses }}</div>
+            </div>
+            <div class="stat">
+                <div class="label">Notifications</div>
+                <div class="value">{{ total_notifications }}</div>
+            </div>
+            <div class="stat">
+                <div class="label">Fee Balance</div>
+                <div class="value">${{ fee_balance|floatformat:2 }}</div>
+            </div>
+        </div>
+
+        <div class="list">
+            <div class="card">
+                <h2>Campus network</h2>
+                {% if campuses %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campus</th>
+                            <th>City</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campus in campuses %}
+                        <tr>
+                            <td>{{ campus.campus_name }}</td>
+                            <td>{{ campus.city }}</td>
+                            <td>{% if campus.is_active %}Active{% else %}Inactive{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No campuses configured yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="card">
+                <h2>Recent billing</h2>
+                {% if invoices %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Plan</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invoice in invoices %}
+                        <tr>
+                            <td>{{ invoice.plan_name }}</td>
+                            <td>${{ invoice.amount }}</td>
+                            <td>{{ invoice.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No invoices available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

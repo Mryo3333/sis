@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Manage Students | SIS</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f7f2;
+
+            color: #193b2a;
+        }
+
+
+        .navbar {
+
+            background: #193b2a;
+
+            color: white;
+
+            padding: 18px 35px;
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            align-items: center;
+        }
+
+
+        .brand {
+
+            font-size: 24px;
+
+            font-weight: 700;
+        }
+
+
+        .brand span {
+
+            color: #c9e84a;
+        }
+
+
+        .logout {
+
+            text-decoration: none;
+
+            background: #c9e84a;
+
+            color: #193b2a;
+
+            padding:
+                10px 18px;
+
+            border-radius: 8px;
+
+            font-weight: 700;
+        }
+
+
+        .container {
+
+            max-width: 1400px;
+
+            margin: auto;
+
+            padding: 35px;
+        }
+
+
+        h1 {
+
+            margin-top: 0;
+
+            font-size: 36px;
+        }
+
+
+        .subtitle {
+
+            color: #718078;
+
+            margin-bottom: 30px;
+        }
+
+
+        .card {
+
+            background: white;
+
+            border:
+                1px solid #e1e7e1;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(25, 59, 42, 0.07);
+        }
+
+
+        .card h2 {
+
+            margin-top: 0;
+        }
+
+
+        .search {
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .search input {
+
+            flex: 1;
+
+            padding: 13px;
+
+            border:
+                1px solid #dce5da;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+        }
+
+
+        button,
+        .button {
+
+            border: none;
+
+            background: #c9e84a;
+
+            color: #193b2a;
+
+            padding:
+                12px 20px;
+
+            border-radius: 8px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+            display: inline-block;
+        }
+
+
+        .button-dark {
+
+            background: #193b2a;
+
+            color: white;
+        }
+
+
+        .button-danger {
+
+            background: #dc5c5c;
+
+            color: white;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse:
+                collapse;
+        }
+
+
+        th {
+
+            background: #edf2eb;
+
+            text-align: left;
+
+            padding: 15px;
+        }
+
+
+        td {
+
+            padding: 15px;
+
+            border-bottom:
+                1px solid #e5eae5;
+        }
+
+
+        .actions {
+
+            display: flex;
+
+            gap: 8px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+
+        .form-group label {
+
+            font-weight: 700;
+        }
+
+
+        .form-group input,
+        .form-group select {
+
+            padding: 12px;
+
+            border:
+                1px solid #dce5da;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+        }
+
+
+        .full {
+
+            grid-column:
+                1 / -1;
+        }
+
+
+        .form-actions {
+
+            margin-top: 20px;
+
+            display: flex;
+
+            gap: 10px;
+        }
+
+
+        .empty {
+
+            padding: 30px;
+
+            text-align: center;
+
+            color: #718078;
+        }
+
+
+        @media(max-width: 800px) {
+
+            .form-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .full {
+
+                grid-column:
+                    auto;
+            }
+
+
+            table {
+
+                font-size: 14px;
+            }
+
+
+            .container {
+
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <div class="navbar">
+
+        <div class="brand">
+
+            Student
+            <span>Information System</span>
+
+        </div>
+
+
+        <a
+            href="{% url 'logout' %}"
+            class="logout"
+        >
+            Logout
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="container">
+
+
+        <h1>
+            Manage Students
+        </h1>
+
+
+        <p class="subtitle">
+            Add, edit, search and manage students.
+        </p>
+
+
+        <!-- =================================================
+             ADD / EDIT FORM
+        ================================================== -->
+
+        <div class="card">
+
+            {% if edit_student %}
+
+                <h2>
+                    Edit Student
+                </h2>
+
+            {% else %}
+
+                <h2>
+                    Add New Student
+                </h2>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                {% if edit_student %}
+                    action="{% url 'admin_edit_student' edit_student.student_id %}"
+                {% else %}
+                    action="{% url 'admin_add_student' %}"
+                {% endif %}
+            >
+
+                {% csrf_token %}
+
+
+                <div class="form-grid">
+
+
+                    <!-- STUDENT ID -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Student ID
+                        </label>
+
+                        <input
+                            type="text"
+                            name="student_id"
+                            placeholder="Example: 5002"
+                            value="{% if edit_student %}{{ edit_student.student_id }}{% endif %}"
+                            {% if edit_student %}readonly{% endif %}
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Student Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Student name"
+                            value="{% if edit_student %}{{ edit_student.name }}{% endif %}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="student@example.com"
+                            value="{% if edit_student %}{{ edit_student.email|default:'' }}{% endif %}"
+                        >
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Phone
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            placeholder="Phone number"
+                            value="{% if edit_student %}{{ edit_student.phone }}{% endif %}"
+                        >
+
+                    </div>
+
+
+                    <!-- COURSE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Course
+                        </label>
+
+                        <select name="course">
+
+                            <option value="">
+                                Select Course
+                            </option>
+
+
+                            {% for course in courses %}
+
+                                <option
+                                    value="{{ course.course_id }}"
+                                    {% if edit_student and edit_student.course and edit_student.course.course_id == course.course_id %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ course.course_name }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SEMESTER -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Semester
+                        </label>
+
+                        <input
+                            type="number"
+                            name="semester"
+                            min="1"
+                            max="12"
+                            placeholder="Example: 4"
+                            value="{% if edit_student %}{{ edit_student.semester }}{% else %}1{% endif %}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- ADMISSION YEAR -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Admission Year
+                        </label>
+
+                        <input
+                            type="number"
+                            name="admission_year"
+                            min="2000"
+                            max="2100"
+                            placeholder="Example: 2026"
+                            value="{% if edit_student %}{{ edit_student.admission_year }}{% else %}2026{% endif %}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select name="status">
+
+                            <option
+                                value="Active"
+                                {% if not edit_student or edit_student.status == "Active" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Active
+                            </option>
+
+
+                            <option
+                                value="Inactive"
+                                {% if edit_student and edit_student.status == "Inactive" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Inactive
+                            </option>
+
+
+                            <option
+                                value="Graduated"
+                                {% if edit_student and edit_student.status == "Graduated" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Graduated
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <button type="submit">
+
+                        {% if edit_student %}
+                            Update Student
+                        {% else %}
+                            Add Student
+                        {% endif %}
+
+                    </button>
+
+
+                    {% if edit_student %}
+
+                        <a
+                            href="{% url 'admin_students' %}"
+                            class="button button-dark"
+                        >
+                            Cancel
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             SEARCH
+        ================================================== -->
+
+        <div class="card">
+
+            <h2>
+                Student List
+            </h2>
+
+
+            <form
+                method="GET"
+                class="search"
+            >
+
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Search by student ID, name or email..."
+                    value="{{ search }}"
+                >
+
+
+                <button type="submit">
+                    Search
+                </button>
+
+
+                {% if search %}
+
+                    <a
+                        href="{% url 'admin_students' %}"
+                        class="button button-dark"
+                    >
+                        Clear
+                    </a>
+
+                {% endif %}
+
+            </form>
+
+
+            <!-- =================================================
+                 STUDENT TABLE
+            ================================================== -->
+
+            {% if students %}
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Student ID
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Course
+                            </th>
+
+                            <th>
+                                Semester
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for student in students %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        {{ student.student_id }}
+                                    </strong>
+                                </td>
+
+
+                                <td>
+                                    {{ student.name }}
+                                </td>
+
+
+                                <td>
+                                    {{ student.email|default:"-" }}
+                                </td>
+
+
+                                <td>
+
+                                    {% if student.course %}
+                                        {{ student.course.course_name }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+                                    {{ student.semester }}
+                                </td>
+
+
+                                <td>
+                                    {{ student.status }}
+                                </td>
+
+
+                                <td>
+
+                                    <div class="actions">
+
+
+                                        <a
+                                            href="{% url 'admin_students' %}?edit={{ student.student_id }}"
+                                            class="button"
+                                        >
+                                            Edit
+                                        </a>
+
+
+                                        <form
+                                            method="POST"
+                                            action="{% url 'admin_delete_student' student.student_id %}"
+                                            onsubmit="return confirm('Are you sure you want to delete this student?');"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="button-danger"
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </form>
+
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+
+            {% else %}
+
+                <div class="empty">
+
+                    No students found.
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <!-- =================================================
+             BACK TO DASHBOARD
+        ================================================== -->
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="button button-dark"
+        >
+            ← Back to Dashboard
+        </a>
+
+
+    </div>
+
+
+</body>
+
+</html>

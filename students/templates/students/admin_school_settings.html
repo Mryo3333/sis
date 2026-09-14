@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Settings</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: linear-gradient(180deg, #edf7f3, #f9fbfa); color: #17382b; }
+        .wrap { max-width: 980px; margin: 40px auto; padding: 0 18px 50px; }
+        .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .card { background: rgba(255,255,255,0.85); border: 1px solid rgba(20,52,41,0.08); border-radius: 22px; padding: 24px; box-shadow: 0 12px 30px rgba(15,31,27,0.04); }
+        form { display: grid; gap: 14px; }
+        .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+        label { display: grid; gap: 8px; font-weight: 600; }
+        input, select, textarea, button { font: inherit; border-radius: 12px; border: 1px solid #dfe8df; padding: 11px 12px; }
+        button { background: linear-gradient(135deg, #d8ff63, #bfe728); border: 0; font-weight: 700; cursor: pointer; }
+        a { color: inherit; text-decoration: none; }
+        .btn { display:inline-block; padding: 10px 16px; border-radius: 12px; background: #17382b; color: white; }
+        @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .top { display:block; } }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div>
+                <h1>School Settings</h1>
+                <p>Configure your institution brand, operations, and SaaS plan.</p>
+            </div>
+            <a class="btn" href="{% url 'dashboard' %}">Dashboard</a>
+        </div>
+
+        <div class="card">
+            <form method="post">
+                {% csrf_token %}
+                <div class="grid">
+                    <label>School name
+                        <input type="text" name="school_name" value="{{ settings.school_name }}" required>
+                    </label>
+                    <label>Short name
+                        <input type="text" name="short_name" value="{{ settings.short_name }}">
+                    </label>
+                    <label>Tagline
+                        <input type="text" name="tagline" value="{{ settings.tagline }}">
+                    </label>
+                    <label>Academic year
+                        <input type="text" name="academic_year" value="{{ settings.academic_year }}">
+                    </label>
+                    <label>Campus count
+                        <input type="number" min="1" name="campus_count" value="{{ settings.campus_count }}">
+                    </label>
+                    <label>Subscription plan
+                        <select name="subscription_plan">
+                            <option value="Starter" {% if settings.subscription_plan == 'Starter' %}selected{% endif %}>Starter</option>
+                            <option value="Growth" {% if settings.subscription_plan == 'Growth' %}selected{% endif %}>Growth</option>
+                            <option value="Enterprise" {% if settings.subscription_plan == 'Enterprise' %}selected{% endif %}>Enterprise</option>
+                        </select>
+                    </label>
+                    <label>Phone
+                        <input type="text" name="phone" value="{{ settings.phone }}">
+                    </label>
+                    <label>Email
+                        <input type="email" name="email" value="{{ settings.email }}">
+                    </label>
+                    <label style="grid-column: 1 / -1;">Address
+                        <textarea name="address" rows="3">{{ settings.address }}</textarea>
+                    </label>
+                    <label style="grid-column: 1 / -1;">Website
+                        <input type="url" name="website" value="{{ settings.website }}">
+                    </label>
+                </div>
+                <button type="submit">Save Settings</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

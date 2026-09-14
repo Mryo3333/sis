@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Campus SIS</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(214,255,123,0.28), transparent 18%),
+                radial-gradient(circle at top right, rgba(90,180,255,0.18), transparent 18%),
+                linear-gradient(135deg, #081d19 0%, #0f2b26 20%, #102f2d 38%, #f6faf7 38%, #f4f9f6 100%);
+            color: #123128;
+        }
+        a { text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px 20px 60px; }
+        .nav {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(12, 24, 22, 0.55); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border-radius: 18px; padding: 18px 26px; border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 12px 28px rgba(7,15,13,0.18);
+            position: sticky; top: 12px; z-index: 10;
+        }
+        .brand { color: white; font-weight: 800; letter-spacing: -0.06em; font-size: clamp(1.2rem, 2vw, 1.7rem); }
+        .brand span { color: #d3ff6f; }
+        .nav-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 18px; border-radius: 12px; font-weight: 700; }
+        .btn-primary { background: linear-gradient(135deg, #d9ff63, #bfe728); color: #103b2d; }
+        .btn-secondary { border: 1px solid rgba(255,255,255,0.12); color: white; }
+        .hero {
+            display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 30px; align-items: center;
+            margin-top: 38px; padding: 48px 32px;
+            background: linear-gradient(135deg, #0b2622, #143c35);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 30px;
+            box-shadow: 0 24px 55px rgba(7, 24, 19, 0.18);
+        }
+        .hero-copy h1 {
+            font-size: clamp(2.7rem, 5vw, 5.3rem); color: #ffffff; line-height: 0.95; letter-spacing: -0.08em; margin-bottom: 18px;
+        }
+        .hero-copy p { font-size: 1.08rem; line-height: 1.7; color: rgba(255,255,255,0.8); max-width: 620px; }
+        .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 26px; }
+        .glass-card {
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.12); border-radius: 28px;
+            box-shadow: 0 18px 45px rgba(9,21,19,0.2); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            padding: 22px;
+        }
+        .dashboard-preview {
+            min-height: 340px; background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.07));
+            border-radius: 24px; padding: 18px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .preview-header { display: flex; justify-content: space-between; align-items: center; color: white; margin-bottom: 18px; }
+        .preview-dots { display: flex; gap: 8px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+        .preview-body { display: grid; grid-template-columns: repeat(2, minmax(130px, 1fr)); gap: 14px; }
+        .mini-card {
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 18px; min-height: 95px;
+        }
+        .mini-label { color: rgba(255,255,255,0.74); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+        .mini-value { color: white; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.06em; margin-top: 10px; }
+        .section { margin-top: 52px; }
+        .section-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 20px; }
+        .section-head h2 {
+            font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -0.05em; color: #103b2d;
+        }
+        .section-head p { color: #5d746b; }
+        .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+        .feature { background: rgba(255,255,255,0.7); border: 1px solid rgba(15,35,29,0.08); border-radius: 22px; padding: 22px; box-shadow: 0 12px 30px rgba(15,35,29,0.04); }
+        .feature .icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #d7ff63, #bfe728); font-weight: 800; color: #103b2d; margin-bottom: 14px; }
+        .feature h3 { margin-bottom: 10px; color: #14362c; }
+        .feature p { color: #607a6d; line-height: 1.7; }
+        .pricing { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+        .plan { background: rgba(255,255,255,0.72); border: 1px solid rgba(15,35,29,0.08); border-radius: 24px; padding: 24px; box-shadow: 0 14px 28px rgba(15,35,29,0.04); }
+        .plan.featured { background: linear-gradient(180deg, #dfff9d, #f3fce5); border-color: rgba(173, 212, 46, 0.4); }
+        .plan h3 { font-size: 1.4rem; margin-bottom: 12px; }
+        .price { font-size: 2.5rem; letter-spacing: -0.06em; font-weight: 800; margin: 12px 0; }
+        .price small { font-size: 1rem; color: #5b736a; }
+        ul { list-style: none; margin-top: 18px; }
+        li { margin-bottom: 10px; color: #3d544f; }
+        .cta {
+            margin-top: 50px; text-align: center; padding: 38px 18px; border-radius: 26px;
+            background: linear-gradient(135deg, #0d261f, #153d37); color: white; border: 1px solid rgba(255,255,255,0.08);
+        }
+        .cta h2 { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.06em; margin-bottom: 14px; }
+        .cta p { color: rgba(255,255,255,0.78); margin-bottom: 26px; }
+        /* Keep the public hero readable when the shared dashboard theme is loaded. */
+        .hero .glass-card {
+            background: rgba(255,255,255,0.12) !important;
+            border-color: rgba(255,255,255,0.12) !important;
+            box-shadow: 0 18px 45px rgba(9,21,19,0.2) !important;
+        }
+        .hero .mini-card {
+            background: rgba(255,255,255,0.08) !important;
+            border-color: rgba(255,255,255,0.08) !important;
+        }
+        .hero .preview-header,
+        .hero .mini-label,
+        .hero .mini-value {
+            color: white !important;
+        }
+        .hero-copy p {
+            color: rgba(255,255,255,0.8) !important;
+        }
+        @media (max-width: 900px) {
+            .hero, .feature-grid, .pricing { grid-template-columns: 1fr; }
+            .nav { flex-direction: column; align-items: flex-start; }
+            .nav-actions { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav">
+            <div class="brand">Cloud <span>Campus</span></div>
+            <div class="nav-actions">
+                <a class="btn btn-secondary" href="{% url 'login' %}">Log in</a>
+                <a class="btn btn-primary" href="{% url 'demo_request' %}">Request Demo</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="hero-copy">
+                <h1>Cloud-based school management for modern campuses.</h1>
+                <p>
+                    Run admissions, academics, attendance, marks, payments, notices, and parent communication in one secure platform built for real educational institutions.
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="{% url 'student_register' %}">Apply Now</a>
+                    <a class="btn btn-secondary" href="{% url 'login' %}" style="border-color: rgba(255,255,255,0.18); color: white;">Admin Login</a>
+                </div>
+            </div>
+
+            <div class="glass-card dashboard-preview">
+                <div class="preview-header">
+                    <strong>Academic Overview</strong>
+                    <div class="preview-dots">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>
+                <div class="preview-body">
+                    <div class="mini-card"><div class="mini-label">Students</div><div class="mini-value">{{ total_students|default:"0" }}</div></div>
+                    <div class="mini-card"><div class="mini-label">Teachers</div><div class="mini-value">{{ total_teachers|default:"0" }}</div></div>
+                    <div class="mini-card"><div class="mini-label">Attendance</div><div class="mini-value">{{ attendance_rate|default:"0" }}%</div></div>
+                    <div class="mini-card"><div class="mini-label">Fees billed</div><div class="mini-value">${{ fee_total|default:"0"|floatformat:0 }}</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2>Everything a modern school needs</h2>
+                <p>From student lifecycle to campus analytics</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="icon">A</div>
+                    <h3>Admissions</h3>
+                    <p>Track applications, review candidates, and approve enrollment faster with a clean admissions workflow.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">R</div>
+                    <h3>Results & Reports</h3>
+                    <p>Publish results, monitor student performance, and provide transparent academic reporting to families.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">F</div>
+                    <h3>Fee Management</h3>
+                    <p>Track tuition, due balances, and payment history with a streamlined finance workflow.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">T</div>
+                    <h3>Timetables</h3>
+                    <p>Assign schedules, rooms, and subjects with a clear academic calendar for every student and class.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">N</div>
+                    <h3>Notices</h3>
+                    <p>Publish policy updates, exam notices, fee alerts, and important communication for all audiences.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">C</div>
+                    <h3>Cloud Ready</h3>
+                    <p>Built with Django and deployment-ready infrastructure, designed to scale for real institutional use.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-head">
+                <h2>Flexible pricing</h2>
+                <p>Made for schools, colleges, and training institutions</p>
+            </div>
+            <div class="pricing">
+                <div class="plan">
+                    <h3>Starter</h3>
+                    <div class="price">$49<small>/month</small></div>
+                    <ul>
+                        <li>Up to 500 students</li>
+                        <li>Student + admin portal</li>
+                        <li>Attendance & marks</li>
+                        <li>Basic notices</li>
+                    </ul>
+                </div>
+                <div class="plan featured">
+                    <h3>Growth</h3>
+                    <div class="price">$99<small>/month</small></div>
+                    <ul>
+                        <li>Unlimited students</li>
+                        <li>Parent portal</li>
+                        <li>Fee tracking & payments</li>
+                        <li>Advanced reports</li>
+                    </ul>
+                </div>
+                <div class="plan">
+                    <h3>Enterprise</h3>
+                    <div class="price">Custom</div>
+                    <ul>
+                        <li>Multi-campus support</li>
+                        <li>Custom branding</li>
+                        <li>API integrations</li>
+                        <li>Priority support</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="cta">
+            <h2>Launch a smarter campus today.</h2>
+            <p>Use the system for admissions, academics, records, and operations in one secure digital environment.</p>
+            <a class="btn btn-primary" href="{% url 'demo_request' %}">Book a Demo</a>
+        </div>
+    </div>
+</body>
+</html>

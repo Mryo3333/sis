@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable | SIS</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(180deg, #eef6ff, #f7fbf7 100%);
+            color: #173b30;
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 32px 20px 60px; }
+        .header {
+            display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-bottom: 24px;
+        }
+        .header h1 { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.06em; }
+        .back { text-decoration: none; background: linear-gradient(135deg,#d7ff69,#bfe63a); color:#112f29; padding: 12px 18px; border-radius: 12px; font-weight:800; }
+        .grid { display: grid; gap: 16px; }
+        .entry {
+            display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; gap: 18px; align-items: center;
+            background: rgba(255,255,255,.8); border:1px solid rgba(18,49,40,.08); border-radius: 18px; padding: 18px 20px; box-shadow: 0 12px 26px rgba(14,35,28,.04);
+        }
+        .label { color: #667a72; font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+        .value { font-size: 1.05rem; font-weight: 700; }
+        .empty { background: rgba(255,255,255,.8); border:1px solid rgba(18,49,40,.08); border-radius: 18px; padding: 26px; }
+        @media (max-width: 760px) { .entry { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Weekly Timetable</h1>
+            <a class="back" href="{% url 'dashboard' %}">Back to dashboard</a>
+        </div>
+
+        {% if entries %}
+        <div class="grid">
+            {% for entry in entries %}
+            <div class="entry">
+                <div>
+                    <div class="label">Subject</div>
+                    <div class="value">{{ entry.subject.subject_name }}</div>
+                </div>
+                <div>
+                    <div class="label">Day</div>
+                    <div class="value">{{ entry.day_of_week }}</div>
+                </div>
+                <div>
+                    <div class="label">Time</div>
+                    <div class="value">{{ entry.start_time }} - {{ entry.end_time }}</div>
+                </div>
+                <div>
+                    <div class="label">Room / Lecturer</div>
+                    <div class="value">{{ entry.room|default:'General Hall' }} · {{ entry.teacher.name|default:'Faculty' }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty">
+            There is no timetable currently set for this role. Please contact the administration office.
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

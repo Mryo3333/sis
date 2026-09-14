@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Records | SIS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: linear-gradient(180deg, #edf7ef, #fbfdfb); color: #17382b; }
+        .wrap { max-width: 1200px; margin: 40px auto; padding: 0 20px 50px; }
+        .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .btn { display:inline-block; padding: 10px 16px; border-radius: 12px; background:#17382b; color:#fff; text-decoration:none; }
+        .card { background: rgba(255,255,255,0.82); border:1px solid rgba(17,40,33,0.08); border-radius: 22px; padding: 22px; box-shadow: 0 12px 28px rgba(17,40,33,0.04); }
+        table { width:100%; border-collapse: collapse; }
+        th, td { padding: 12px 10px; text-align:left; border-bottom: 1px solid #ebefe8; }
+        .badge { display: inline-block; padding: 5px 10px; border-radius: 999px; background: #edf5d8; font-size: 12px; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div>
+                <h1>Payment Records</h1>
+                <p>Track all fee collection activity across the system.</p>
+            </div>
+            <a class="btn" href="{% url 'dashboard' %}">Dashboard</a>
+        </div>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Fee Type</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Reference</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.fee.student.name }}</td>
+                        <td>{{ payment.fee.fee_type }}</td>
+                        <td>${{ payment.amount }}</td>
+                        <td>{{ payment.payment_method }}</td>
+                        <td>{{ payment.reference|default:'—' }}</td>
+                        <td>{{ payment.payment_date|date:"M d, Y" }}</td>
+                        <td><span class="badge">{{ payment.status }}</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7">No payment records found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

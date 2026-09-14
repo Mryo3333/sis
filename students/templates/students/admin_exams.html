@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examination Records | SIS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f7f2; color: #17382b; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .title { font-size: 34px; font-weight: 800; }
+        .btn { text-decoration: none; background: #c8f23d; color: #17382b; padding: 12px 18px; border-radius: 10px; font-weight: 700; }
+        .panel { background: #fff; border: 1px solid #e2e8e0; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 18px rgba(23,56,43,0.06); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #edf0ed; }
+        th { background: #eef5e7; }
+        .empty { padding: 30px; color: #718078; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="title">Examination Records</div>
+            <a href="{% url 'dashboard' %}" class="btn">Back to Dashboard</a>
+        </div>
+
+        <div class="panel">
+            {% if exams %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Exam Name</th>
+                            <th>Type</th>
+                            <th>Academic Year</th>
+                            <th>Semester</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exam in exams %}
+                            <tr>
+                                <td>{{ exam.exam_name }}</td>
+                                <td>{{ exam.exam_type }}</td>
+                                <td>{{ exam.academic_year }}</td>
+                                <td>{{ exam.semester }}</td>
+                                <td>{{ exam.start_date|default:"-" }}</td>
+                                <td>{{ exam.end_date|default:"-" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty">No examinations found.</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

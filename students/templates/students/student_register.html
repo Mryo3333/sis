@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Student Registration | SIS</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background: #f5f7f2;
+
+            color: #19352a;
+
+        }
+
+        .header {
+
+            background: #17382b;
+
+            color: white;
+
+            padding: 22px 40px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+        }
+
+        .logo {
+
+            width: 50px;
+            height: 50px;
+
+            border-radius: 14px;
+
+            background: #c8f23d;
+
+            color: #17382b;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: 900;
+
+            font-size: 18px;
+
+        }
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 24px;
+
+        }
+
+        .header p {
+
+            margin: 3px 0 0;
+
+            color: #a8bbb0;
+
+        }
+
+        .container {
+
+            max-width: 1000px;
+
+            margin: 40px auto;
+
+            padding: 0 20px;
+
+        }
+
+        .card {
+
+            background: white;
+
+            border: 1px solid #dfe7df;
+
+            border-radius: 18px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 8px 30px
+                rgba(23, 56, 43, 0.08);
+
+        }
+
+        h2 {
+
+            margin-top: 0;
+
+            font-size: 30px;
+
+        }
+
+        .subtitle {
+
+            color: #718078;
+
+            margin-bottom: 30px;
+
+        }
+
+        .grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+
+        }
+
+        .field {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+
+        }
+
+        .full {
+
+            grid-column: 1 / -1;
+
+        }
+
+        label {
+
+            font-weight: 600;
+
+            font-size: 14px;
+
+        }
+
+        input,
+        select,
+        textarea {
+
+            width: 100%;
+
+            padding: 12px 14px;
+
+            border: 1px solid #ccd8ce;
+
+            border-radius: 9px;
+
+            font-size: 15px;
+
+        }
+
+        textarea {
+
+            min-height: 100px;
+
+            resize: vertical;
+
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+
+            outline: none;
+
+            border-color: #9fc82f;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(200,242,61,0.2);
+
+        }
+
+        .error {
+
+            background: #fff0f0;
+
+            border-left: 4px solid #d9534f;
+
+            padding: 14px;
+
+            margin-bottom: 25px;
+
+            color: #8b2d2a;
+
+        }
+
+        .info {
+
+            background: #edf8d7;
+
+            border-left: 4px solid #c8f23d;
+
+            padding: 15px;
+
+            margin-top: 25px;
+
+            line-height: 1.5;
+
+        }
+
+        button {
+
+            margin-top: 25px;
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #17382b;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+        }
+
+        button:hover {
+
+            background: #24533f;
+
+        }
+
+        .login {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+        }
+
+        .login a {
+
+            color: #247a55;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+        }
+
+        @media(max-width: 700px) {
+
+            .grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .full {
+
+                grid-column: auto;
+
+            }
+
+            .card {
+
+                padding: 22px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <div class="logo">
+            SIS
+        </div>
+
+        <div>
+
+            <h1>
+                Student Information System
+            </h1>
+
+            <p>
+                Academic Management
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>
+                Student Registration
+            </h2>
+
+            <p class="subtitle">
+                Submit your student registration application.
+            </p>
+
+
+            {% if error %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                action="{% url 'student_register' %}"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            Student ID *
+                        </label>
+
+                        <input
+                            type="text"
+                            name="student_id"
+                            value="{{ form_data.student_id|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Full Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            value="{{ form_data.name|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Email *
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            value="{{ form_data.email|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Phone
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            value="{{ form_data.phone|default:'' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Date of Birth
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date_of_birth"
+                            value="{{ form_data.date_of_birth|default:'' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Gender
+                        </label>
+
+                        <select name="gender">
+
+                            <option value="">
+                                Select Gender
+                            </option>
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Course *
+                        </label>
+
+                        <select
+                            name="course"
+                            required
+                        >
+
+                            <option value="">
+                                Select Course
+                            </option>
+
+                            {% for course in courses %}
+
+                                <option
+                                    value="{{ course.course_id }}"
+                                >
+                                    {{ course.course_name }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Admission Year *
+                        </label>
+
+                        <input
+                            type="number"
+                            name="admission_year"
+                            value="{{ form_data.admission_year|default:'' }}"
+                            min="2000"
+                            max="2100"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Semester *
+                        </label>
+
+                        <input
+                            type="number"
+                            name="semester"
+                            value="{{ form_data.semester|default:'' }}"
+                            min="1"
+                            max="20"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Username *
+                        </label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            value="{{ form_data.username|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label>
+                            Address
+                        </label>
+
+                        <textarea
+                            name="address"
+                        >{{ form_data.address|default:'' }}</textarea>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Password *
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Confirm Password *
+                        </label>
+
+                        <input
+                            type="password"
+                            name="confirm_password"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="info">
+
+                    <strong>
+                        Important:
+                    </strong>
+
+                    Your account will remain pending until an
+                    administrator reviews and approves your
+                    registration.
+
+                    You will not be able to log in before approval.
+
+                </div>
+
+
+                <button type="submit">
+
+                    Submit Registration
+
+                </button>
+
+
+            </form>
+
+
+            <div class="login">
+
+                Already registered?
+
+                <a href="{% url 'login' %}">
+                    Go to Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

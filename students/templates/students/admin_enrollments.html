@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Enrollments | SIS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f7f2; color: #17382b; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .title { font-size: 34px; font-weight: 800; }
+        .btn { text-decoration: none; background: #c8f23d; color: #17382b; padding: 12px 18px; border-radius: 10px; font-weight: 700; }
+        .panel { background: #fff; border: 1px solid #e2e8e0; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 18px rgba(23,56,43,0.06); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #edf0ed; }
+        th { background: #eef5e7; }
+        .badge { display: inline-block; padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #eaf5d7; color: #3f5f23; }
+        .empty { padding: 30px; color: #718078; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="topbar">
+            <div class="title">Student Enrollments</div>
+            <a href="{% url 'dashboard' %}" class="btn">Back to Dashboard</a>
+        </div>
+
+        <div class="panel">
+            {% if enrollments %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Subject</th>
+                            <th>Year</th>
+                            <th>Semester</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enrollment in enrollments %}
+                            <tr>
+                                <td>{{ enrollment.student.student_id }} - {{ enrollment.student.name }}</td>
+                                <td>{{ enrollment.subject.course.course_name }}</td>
+                                <td>{{ enrollment.subject.subject_name }}</td>
+                                <td>{{ enrollment.academic_year }}</td>
+                                <td>{{ enrollment.semester }}</td>
+                                <td><span class="badge">{{ enrollment.status }}</span></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty">No enrollments found.</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/sis-premium.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Fee Payments</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: linear-gradient(180deg, #edf9f1, #fafcfb); color: #18382d; }
+        .wrap { max-width: 1100px; margin: 40px auto; padding: 0 20px 50px; }
+        .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
+        .card { background: rgba(255,255,255,0.82); border: 1px solid rgba(17,40,33,0.08); border-radius: 22px; padding: 24px; box-shadow: 0 14px 28px rgba(14,31,27,0.05); }
+        .grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; }
+        form { display: grid; gap: 14px; }
+        label { display: grid; gap: 8px; font-weight: 600; }
+        input, select, textarea, button { font: inherit; border-radius: 10px; border: 1px solid #dfe7df; padding: 12px 14px; }
+        button { background: linear-gradient(135deg, #d8ff63, #bfe728); border: 0; cursor: pointer; font-weight: 700; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 10px; border-bottom: 1px solid #e7efe8; text-align: left; }
+        .badge { display: inline-block; padding: 5px 10px; border-radius: 999px; background: #edf5d6; font-weight: 700; }
+        .alert { background: #fff2d9; border: 1px solid #f0d190; color: #785b00; padding: 12px 14px; border-radius: 12px; margin-bottom: 16px; }
+        a { color: inherit; text-decoration: none; }
+        .btn { display:inline-block; padding: 10px 16px; border-radius: 12px; background: #17382b; color: white; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div>
+                <h1>Fee Payments</h1>
+                <p>Record and track your payments against your tuition and other school fees.</p>
+            </div>
+            <div>
+                <a class="btn" href="{% url 'dashboard' %}">Dashboard</a>
+            </div>
+        </div>
+
+        {% if error %}
+            <div class="alert">{{ error }}</div>
+        {% endif %}
+
+        <div class="grid">
+            <div class="card">
+                <h2>Make a Payment</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <label>
+                        Fee record
+                        <select name="fee_id" required>
+                            <option value="">Select fee</option>
+                            {% for fee in fees %}
+                                <option value="{{ fee.fee_id }}">{{ fee.fee_type }} · {{ fee.academic_year }} · ${{ fee.amount }} (Due: ${{ fee.amount|floatformat:2 }})</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>
+                        Payment amount
+                        <input type="number" step="0.01" min="0.01" name="amount" placeholder="0.00" required>
+                    </label>
+                    <label>
+                        Payment method
+                        <select name="method">
+                            <option value="Cash">Cash</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Card">Card</option>
+                            <option value="Mobile Money">Mobile Money</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </label>
+                    <label>
+                        Reference / receipt number
+                        <input type="text" name="reference" placeholder="Optional reference">
+                    </label>
+                    <label>
+                        Notes
+                        <textarea name="notes" rows="4" placeholder="Optional payment notes"></textarea>
+                    </label>
+                    <button type="submit">Save Payment</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Payment History</h2>
+                {% if payments %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fee</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                                <tr>
+                                    <td>{{ payment.fee.fee_type }}</td>
+                                    <td>${{ payment.amount }}</td>
+                                    <td>{{ payment.payment_method }}</td>
+                                    <td>{{ payment.payment_date|date:"M d, Y" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No payment history yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

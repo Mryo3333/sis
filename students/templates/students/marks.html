@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Marks | Student Information System</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(195,255,47,0.16), transparent 18%),
+                radial-gradient(circle at bottom right, rgba(94,214,255,0.12), transparent 20%),
+                linear-gradient(180deg, #edf7f2 0%, #f6faf8 100%);
+            color: #19352a;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: rgba(17, 33, 28, 0.72);
+            color: white;
+            padding: 28px 20px;
+            border-right: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 12px 0 36px rgba(16, 27, 23, 0.14);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 45px;
+        }
+
+        .logo-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #d9ff63, #bfe728);
+            color: #17382b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            box-shadow: 0 12px 24px rgba(191,231,40,0.2);
+        }
+
+        .logo-text h2 {
+            font-size: 18px;
+        }
+
+        .logo-text p {
+            color: #a8bbb0;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .nav-title {
+            color: #8fa69a;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 13px 14px;
+            margin-bottom: 7px;
+            border-radius: 12px;
+            color: #dce6e0;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(2px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, #d9ff63, #bfe728);
+            color: #17382b;
+            font-weight: 700;
+            box-shadow: 0 12px 24px rgba(191,231,40,0.18);
+        }
+
+        .logout {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            bottom: 30px;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            background: rgba(255,255,255,0.08);
+            transition: 0.2s ease;
+        }
+
+        .logout:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+
+            padding: 45px 50px;
+        }
+
+        .page-title {
+            font-size: 38px;
+            margin-bottom: 30px;
+        }
+
+        /* ================= PANEL ================= */
+
+        .panel {
+            background: linear-gradient(180deg, #ffffff 0%, #fbfefc 100%);
+            border: 1px solid rgba(23, 56, 43, 0.08);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 14px 26px rgba(23, 56, 43, 0.06);
+        }
+
+        .panel h2 {
+            font-size: 1.5rem;
+            margin-bottom: 22px;
+            letter-spacing: -0.04em;
+        }
+
+        /* ================= SUBJECT / EXAM BUTTONS ================= */
+
+        .selection-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .selection-button {
+            display: block;
+            padding: 20px 28px;
+            border: 1px solid rgba(23,56,43,0.08);
+            border-radius: 16px;
+            background: linear-gradient(180deg, #f9fcf9 0%, #f1f7f2 100%);
+            color: #19352a;
+            text-decoration: none;
+            font-size: 20px;
+            transition: 0.2s ease;
+            box-shadow: 0 10px 18px rgba(23,56,43,0.02);
+        }
+
+        .selection-button:hover {
+            background: linear-gradient(180deg, #edf9c9 0%, #e5f4b8 100%);
+            border-color: #b6dc39;
+            font-weight: 700;
+            transform: translateY(-2px);
+            box-shadow: 0 16px 28px rgba(167,201,42,0.12);
+        }
+
+        .selection-button.selected {
+            background: linear-gradient(180deg, #edf9c9 0%, #e5f4b8 100%);
+            border-color: #b6dc39;
+            font-weight: 700;
+            box-shadow: 0 16px 28px rgba(167,201,42,0.14);
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 15px;
+        }
+
+        th {
+            text-align: left;
+
+            padding: 20px;
+
+            background: #f1f4ef;
+
+            color: #596c61;
+
+            font-size: 16px;
+        }
+
+        td {
+            padding: 20px;
+
+            border-bottom: 1px solid #edf0ed;
+
+            font-size: 17px;
+        }
+
+        .student-id {
+            font-weight: 600;
+        }
+
+        /* ================= MARK INPUT ================= */
+
+        .marks-input {
+            width: 245px;
+            padding: 15px 18px;
+            border: 1px solid rgba(23,56,43,0.12);
+            border-radius: 12px;
+            font-size: 17px;
+            outline: none;
+            background: #f9fbf9;
+        }
+
+        .marks-input:focus {
+            border-color: #a9d82e;
+            box-shadow: 0 0 0 3px rgba(200, 242, 61, 0.2);
+        }
+
+        /* ================= SAVE BUTTON ================= */
+
+        .save-container {
+            display: flex;
+
+            justify-content: flex-end;
+
+            margin-top: 30px;
+        }
+
+        .save-button {
+            border: none;
+            background: linear-gradient(135deg, #d9ff63, #bfe728);
+            color: #17382b;
+            padding: 16px 35px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 12px 22px rgba(191,231,40,0.18);
+            transition: 0.2s ease;
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 30px rgba(191,231,40,0.24);
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty {
+            padding: 25px;
+
+            text-align: center;
+
+            color: #7d8982;
+
+            font-size: 16px;
+        }
+
+        /* ================= BACK ================= */
+
+        .back-link {
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+            color: #52715f;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+    <link rel="stylesheet" href="{% static 'css/sis-premium.css' %}">
+
+</head>
+
+
+<body>
+
+
+<!-- ======================================================
+     SIDEBAR
+====================================================== -->
+
+<aside class="sidebar">
+
+
+    <div class="logo">
+
+        <div class="logo-box">
+            SIS
+        </div>
+
+        <div class="logo-text">
+
+            <h2>
+                Student System
+            </h2>
+
+            <p>
+                Academic Management
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-title">
+        NAVIGATION
+    </div>
+
+
+    <a
+        href="{% url 'dashboard' %}"
+        class="nav-item"
+    >
+        Dashboard
+    </a>
+
+
+    <a
+        href="{% url 'teacher_subjects' %}"
+        class="nav-item"
+    >
+        My Subjects
+    </a>
+
+
+    <a
+        href="{% url 'attendance' %}"
+        class="nav-item"
+    >
+        Attendance
+    </a>
+
+
+    <a
+        href="{% url 'marks' %}"
+        class="nav-item active"
+    >
+        Marks
+    </a>
+
+
+    <a
+        href="{% url 'teacher_students' %}"
+        class="nav-item"
+    >
+        Students
+    </a>
+
+
+    <a
+        href="{% url 'logout' %}"
+        class="logout"
+    >
+        Logout
+    </a>
+
+
+</aside>
+
+
+<!-- ======================================================
+     MAIN
+====================================================== -->
+
+<main class="main">
+
+
+    <h1 class="page-title">
+        Marks
+    </h1>
+
+
+    <!-- ==================================================
+         SUBJECT SELECTION
+    =================================================== -->
+
+    {% if not selected_subject %}
+
+
+    <div class="panel">
+
+        <h2>
+            Select Subject
+        </h2>
+
+
+        <div class="selection-list">
+
+
+            {% for subject in subjects %}
+
+
+            <a
+                href="{% url 'marks' %}?subject={{ subject.subject_id }}"
+                class="selection-button"
+            >
+
+                {{ subject.subject_code }}
+                —
+                {{ subject.subject_name }}
+
+            </a>
+
+
+            {% empty %}
+
+
+            <div class="empty">
+                No subjects are assigned to you.
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+
+    {% endif %}
+
+
+    <!-- ==================================================
+         EXAM SELECTION
+    =================================================== -->
+
+    {% if selected_subject and not selected_exam %}
+
+
+    <a
+        href="{% url 'marks' %}"
+        class="back-link"
+    >
+        ← Back to Subjects
+    </a>
+
+
+    <div class="panel">
+
+        <h2>
+            Select Examination
+        </h2>
+
+
+        <div class="selection-list">
+
+
+            {% for exam in exams %}
+
+
+            <a
+                href="{% url 'marks' %}?subject={{ selected_subject.subject_id }}&exam={{ exam.exam_id }}"
+                class="selection-button"
+            >
+
+                {{ exam.exam_name }}
+
+                —
+                
+                {{ exam.exam_type }}
+
+            </a>
+
+
+            {% empty %}
+
+
+            <div class="empty">
+                No examinations are available
+                for this subject.
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+
+    {% endif %}
+
+
+    <!-- ==================================================
+         MARKS ENTRY
+    =================================================== -->
+
+    {% if selected_subject and selected_exam %}
+
+
+    <a
+        href="{% url 'marks' %}?subject={{ selected_subject.subject_id }}"
+        class="back-link"
+    >
+        ← Back to Examinations
+    </a>
+
+
+    <div class="panel">
+
+
+        <h2>
+
+            {{ selected_subject.subject_code }}
+
+            —
+
+            {{ selected_exam.exam_name }}
+
+        </h2>
+
+
+        <div class="table-container">
+
+
+            <form method="POST">
+
+
+                {% csrf_token %}
+
+
+                <input
+                    type="hidden"
+                    name="subject_id"
+                    value="{{ selected_subject.subject_id }}"
+                >
+
+
+                <input
+                    type="hidden"
+                    name="exam_id"
+                    value="{{ selected_exam.exam_id }}"
+                >
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Student ID
+                            </th>
+
+                            <th>
+                                Student Name
+                            </th>
+
+                            <th>
+                                Marks / 100
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for student in students %}
+
+
+                        <tr>
+
+
+                            <td class="student-id">
+
+                                {{ student.student_id }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ student.name }}
+
+                            </td>
+
+
+                            <td>
+
+
+                                <input
+                                    type="number"
+                                    class="marks-input"
+                                    name="marks_{{ student.student_id }}"
+                                    min="0"
+                                    max="100"
+                                    step="0.01"
+                                    placeholder="Enter marks"
+
+                                    {% for mark in existing_marks.values %}
+
+                                        {% if mark.student.student_id == student.student_id %}
+
+                                            value="{{ mark.marks_obtained }}"
+
+                                        {% endif %}
+
+                                    {% endfor %}
+                                >
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% empty %}
+
+
+                        <tr>
+
+                            <td colspan="3">
+
+                                <div class="empty">
+
+                                    No students are enrolled
+                                    in this subject.
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+                {% if students %}
+
+
+                <div class="save-container">
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                    >
+                        Save Marks
+                    </button>
+
+                </div>
+
+
+                {% endif %}
+
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+</body>
+
+</html>
