@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import sys
+from urllib.parse import unquote, urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -100,15 +101,30 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3')
 DB_NAME = os.environ.get('DB_NAME', str(BASE_DIR / 'db.sqlite3'))
+DB_USER = os.environ.get('DB_USER', '')
+DB_PASSWORD = os.environ.get('DB_PASSWORD', '')
+DB_HOST = os.environ.get('DB_HOST', '')
+DB_PORT = os.environ.get('DB_PORT', '')
+
+# Render commonly exposes PostgreSQL as a single connection URL. Accepting
+# that URL in DB_HOST prevents a deployment typo from being treated as a DNS
+# hostname, while still supporting the individual DB_* variables.
+if '://' in DB_HOST:
+    database_url = urlparse(DB_HOST)
+    DB_NAME = database_url.path.lstrip('/') or DB_NAME
+    DB_USER = unquote(database_url.username or DB_USER)
+    DB_PASSWORD = unquote(database_url.password or DB_PASSWORD)
+    DB_HOST = database_url.hostname or ''
+    DB_PORT = str(database_url.port or DB_PORT)
 
 DATABASES = {
     'default': {
         'ENGINE': DB_ENGINE,
         'NAME': DB_NAME,
-        'USER': os.environ.get('DB_USER', ''),
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
-        'HOST': os.environ.get('DB_HOST', ''),
-        'PORT': os.environ.get('DB_PORT', ''),
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }
 
