@@ -29,7 +29,11 @@ The Render service must have:
 
 - Build command: `pip install -r requirements.txt && python manage.py collectstatic --noinput`
 - Release command: `python manage.py migrate --noinput`
-- Start command: `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 3`
+- Start command: `python manage.py bootstrap_admin && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 3`
+
+Set `ADMIN_USERNAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` in Render. The
+startup command creates or updates the approved administrator automatically,
+so a paid Render Shell is not required.
 
 If the generated Render URL is not `https://sis.onrender.com`, update
 `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS` in the Render environment variables
